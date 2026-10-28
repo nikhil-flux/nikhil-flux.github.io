@@ -85,13 +85,19 @@ section{padding:90px 0}
 /* gauge */
 .gauge-sec{text-align:center}
 .gauge-sec .tag{font-size:11px;color:var(--muted)}
-.gauge{width:280px;margin:30px auto 0}
+.gauge{width:min(420px,88vw);margin:30px auto 0}
 .gauge .arc{fill:none;stroke-width:14;stroke-linecap:round}
 .gauge .bg{stroke:rgba(120,170,255,.15)}
-.gauge .a{stroke:var(--cyan);stroke-dasharray:0 400;transition:stroke-dasharray 1.6s ease}
-.gauge .b{stroke:var(--pink);stroke-dasharray:0 400;transition:stroke-dasharray 1.6s ease .2s}
-.gauge.in .a{stroke-dasharray:130 400}
-.gauge.in .b{stroke-dasharray:90 400}
+.gauge .a{stroke:var(--blue);stroke-dasharray:0 400;transition:stroke-dasharray 1.6s ease;filter:drop-shadow(0 0 6px rgba(77,141,255,.6))}
+.gauge .b{stroke:var(--pink);stroke-dasharray:0 400;stroke-dashoffset:-203;transition:stroke-dasharray 1.6s ease .2s;filter:drop-shadow(0 0 6px rgba(255,93,143,.6))}
+.gauge.in .a{stroke-dasharray:197 400}
+.gauge.in .b{stroke-dasharray:197 400}
+.gauge .knob{fill:var(--bg);stroke:#fff;stroke-width:2;opacity:0;transition:opacity .4s 1.6s}.gauge.in .knob{opacity:1}
+.gauge .big{font-size:30px}.gauge .sub{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.25em;text-transform:uppercase;fill:var(--muted)}
+.quote{max-width:720px;margin:34px auto 0;font-size:14px;color:var(--text);line-height:1.8}
+.quote q{display:block;font-size:clamp(15px,2.2vw,19px);color:#fff;quotes:"\201C" "\201D"}
+.quote cite{display:block;margin-top:8px;font-size:11px;color:var(--cyan);font-style:normal}
+.quote p{margin-top:18px;color:var(--muted);font-size:13px}
 .gauge text{fill:var(--text);font-family:'Orbitron',sans-serif;font-size:22px;text-anchor:middle}
 .legend{display:flex;justify-content:center;gap:24px;font-size:11px;color:var(--muted);margin-top:10px}
 
@@ -169,6 +175,22 @@ input[type=range]{width:100%;accent-color:var(--cyan)}
 .termin input{flex:1;background:none;border:0;outline:0;color:var(--text);font:inherit}
 @media(max-width:860px){.lab{grid-template-columns:1fr}.stage{min-width:45%;border-radius:10px!important}}
 
+
+/* live diagram */
+.hud{fill:none;stroke:var(--cyan);stroke-width:1.4;opacity:.75}
+.pipe-line{fill:none;stroke:rgba(120,170,255,.55);stroke-width:1.4}
+.tele-line{fill:none;stroke:rgba(255,93,143,.6);stroke-width:1.4}
+.lbl{fill:var(--muted);font-size:10px;text-anchor:middle;font-family:'JetBrains Mono',monospace}
+.node.pink rect{stroke:var(--pink)}.node.pink text{fill:var(--pink)}
+.ticks{fill:none;stroke:var(--cyan);stroke-width:5;stroke-dasharray:1 7;opacity:.55;transform-box:view-box;transform-origin:340px 150px;animation:spinr 30s linear infinite}
+@keyframes spinr{to{transform:rotate(-360deg)}}
+.top .live{color:var(--cyan)}
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+.metrics div{border:1px solid var(--line);border-radius:8px;padding:7px 9px;background:rgba(10,30,80,.5)}
+.metrics span{display:block;font-size:9px;color:var(--muted);text-transform:uppercase}
+.metrics b{font-size:13px;color:var(--cyan);font-weight:500}
+.mail{display:inline-flex;align-items:center;gap:10px;font-size:13px;color:var(--cyan);border-bottom:1px dashed var(--cyan);padding-bottom:2px}
+.mail:hover{color:#fff;border-color:#fff}
 @media(max-width:860px){
   .hero,.two,.grid{grid-template-columns:1fr}
   .links{display:none}
@@ -211,21 +233,53 @@ input[type=range]{width:100%;accent-color:var(--cyan)}
   </div>
 
   <div class="card diagram">
-    <div class="top"><span>fig. 01 · request path</span><span>live</span></div>
-    <svg viewBox="0 0 520 300" role="img" aria-label="Request flows from client through CDN and load balancer into a Kubernetes cluster, then to a database and monitoring">
+    <div class="top"><span>fig. 01 · request path</span><span class="live"><i class="dot"></i>live</span></div>
+    <svg viewBox="0 0 520 300" role="img" aria-label="Live diagram: a request travels from client through edge and load balancer into a Kubernetes cluster, then to the datastore, with metrics flowing to Prometheus and Grafana">
+      <defs><filter id="glow"><feGaussianBlur stdDeviation="2.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+      <!-- HUD corners -->
+      <g class="hud"><path d="M6 22V6H22"/><path d="M498 6H514V22"/><path d="M6 278V294H22"/><path d="M498 294H514V278"/></g>
+
+      <!-- pipes -->
+      <path id="main" class="pipe-line" d="M41 150H340"/>
+      <path class="pipe-line" d="M404 150H481"/>
+      <!-- one request bracket -->
+      <path class="hud" d="M41 190V200H206V190"/>
+      <text x="124" y="216" class="lbl">one request</text>
+
+      <!-- nodes -->
       <g class="node"><rect x="10" y="135" width="62" height="30" rx="8"/><text x="41" y="154">client</text></g>
-      <g class="node"><rect x="100" y="135" width="52" height="30" rx="8"/><text x="126" y="154">cdn</text></g>
+      <g class="node"><rect x="100" y="135" width="52" height="30" rx="8"/><text x="126" y="154">edge</text></g>
       <g class="node"><rect x="180" y="135" width="52" height="30" rx="8"/><text x="206" y="154">lb</text></g>
-      <path class="flow" d="M72 150H100M152 150H180M232 150H275"/>
-      <circle cx="340" cy="150" r="64" fill="rgba(20,60,160,.35)" stroke="var(--line)"/>
-      <g class="orbit"><circle cx="340" cy="86" r="5" fill="var(--cyan)"/><circle cx="404" cy="150" r="5" fill="var(--blue)"/><circle cx="340" cy="214" r="5" fill="var(--cyan)"/><circle cx="276" cy="150" r="5" fill="var(--blue)"/></g>
-      <circle cx="340" cy="150" r="14" fill="var(--cyan)" opacity=".9"/>
-      <text x="340" y="250" fill="var(--muted)" font-size="10" text-anchor="middle" font-family="JetBrains Mono">k8s cluster</text>
-      <path class="flow" d="M404 150H448"/>
-      <g class="node"><rect x="448" y="135" width="66" height="30" rx="8"/><text x="481" y="154">database</text></g>
-      <path class="flow p" d="M370 205C390 250 400 262 420 262"/>
-      <g class="node"><rect x="420" y="248" width="94" height="28" rx="8" style="stroke:var(--pink)"/><text x="467" y="266" style="fill:var(--pink)">prometheus</text></g>
+      <g class="node"><rect x="448" y="135" width="66" height="30" rx="8"/><text x="481" y="154">datastore</text></g>
+
+      <!-- cluster -->
+      <circle cx="340" cy="150" r="64" fill="rgba(20,60,160,.35)" stroke="var(--cyan)" stroke-opacity=".7"/>
+      <circle class="ticks" cx="340" cy="150" r="58"/>
+      <g class="orbit"><circle cx="340" cy="100" r="4.5" fill="var(--cyan)"/><circle cx="383" cy="175" r="4.5" fill="var(--blue)"/><circle cx="297" cy="175" r="4.5" fill="var(--cyan)"/></g>
+      <circle cx="340" cy="150" r="12" fill="#fff" filter="url(#glow)"/>
+      <text x="340" y="78" class="lbl" style="font-size:9px">k8s cluster</text>
+
+      <!-- telemetry -->
+      <path id="tele" class="tele-line" d="M340 214V262H350"/>
+      <path class="tele-line" d="M426 262H438"/>
+      <g class="node pink"><rect x="350" y="248" width="76" height="28" rx="8"/><text x="388" y="266">prometheus</text></g>
+      <g class="node pink"><rect x="438" y="248" width="70" height="28" rx="8"/><text x="473" y="266">grafana</text></g>
+
+      <!-- travelling packets -->
+      <g filter="url(#glow)">
+        <circle r="3.5" fill="var(--cyan)"><animateMotion dur="3.6s" repeatCount="indefinite" begin="0s"><mpath href="#main"/></animateMotion></circle>
+        <circle r="3.5" fill="var(--cyan)"><animateMotion dur="3.6s" repeatCount="indefinite" begin="1.2s"><mpath href="#main"/></animateMotion></circle>
+        <circle r="3.5" fill="var(--cyan)"><animateMotion dur="3.6s" repeatCount="indefinite" begin="2.4s"><mpath href="#main"/></animateMotion></circle>
+        <circle r="3" fill="var(--pink)"><animateMotion dur="2.4s" repeatCount="indefinite" begin="0.4s"><mpath href="#tele"/></animateMotion></circle>
+        <circle r="3" fill="var(--pink)"><animateMotion dur="2.4s" repeatCount="indefinite" begin="1.6s"><mpath href="#tele"/></animateMotion></circle>
+      </g>
     </svg>
+    <div class="metrics">
+      <div><span>latency</span><b id="m-lat">42 ms</b></div>
+      <div><span>requests</span><b id="m-rps">128 /s</b></div>
+      <div><span>pods</span><b id="m-pods">3/3</b></div>
+      <div><span>uptime</span><b id="m-up">00:00:00</b></div>
+    </div>
   </div>
 </header>
 
@@ -233,13 +287,16 @@ input[type=range]{width:100%;accent-color:var(--cyan)}
   <div class="wrap">
     <p class="tag">// layer 00 · my philosophy</p>
     <h2 class="display" style="font-size:clamp(24px,4vw,38px);margin-top:10px">Platform below. Services above.</h2>
-    <svg class="gauge" id="gauge" viewBox="0 0 280 170">
+    <svg class="gauge" id="gauge" viewBox="0 0 280 170" role="img" aria-label="Ownership split: 50 percent platform, 50 percent services">
       <path class="arc bg" d="M30 150A110 110 0 0 1 250 150"/>
       <path class="arc a" d="M30 150A110 110 0 0 1 250 150" pathLength="400"/>
-      <path class="arc b" d="M30 150A110 110 0 0 1 250 150" pathLength="400" transform="translate(0 0)" style="stroke-dashoffset:-130"/>
-      <text x="140" y="132">infra / app</text>
+      <path class="arc b" d="M30 150A110 110 0 0 1 250 150" pathLength="400"/>
+      <circle class="knob" cx="140" cy="40" r="6"/>
+      <text class="big" x="140" y="118">50 / 50</text>
+      <text class="sub" x="140" y="142">ownership split</text>
     </svg>
-    <div class="legend"><span style="color:var(--cyan)">● reliability</span><span style="color:var(--pink)">● automation</span></div>
+    <div class="legend"><span style="color:var(--blue)">● platform</span><span style="color:var(--pink)">● services</span></div>
+    <div class="quote"><q>Everything fails, all the time.</q><cite>- Werner Vogels, CTO of Amazon</cite><p>I care about the whole stack: clusters, pipelines and Terraform underneath, and the services that run on top. Build it so that when something breaks, it heals itself and tells me why.</p></div>
   </div>
 </section>
 
@@ -413,14 +470,14 @@ input[type=range]{width:100%;accent-color:var(--cyan)}
     <p>Got an internship, a junior DevOps role, or a project idea? Say hello.</p>
     <div class="socials">
       <a href="https://github.com/nikhil-flux" aria-label="GitHub" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z"/></svg></a>
-      <a href="https://www.linkedin.com/" aria-label="LinkedIn" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9.75h4v11.5H3zM9.5 9.75h3.8v1.6h.06c.53-1 1.84-2.05 3.78-2.05 4.04 0 4.78 2.66 4.78 6.12v5.78h-4v-5.13c0-1.22-.02-2.8-1.7-2.8-1.7 0-1.96 1.33-1.96 2.71v5.22h-4z"/></svg></a>
-      <a href="mailto:your-email@example.com" aria-label="Email"><svg viewBox="0 0 24 24"><path d="M3 5h18a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zm9 7.2L4.5 7v.2L12 13l7.5-5.8V7z"/></svg></a>
+      <a href="https://www.linkedin.com/in/nikhil-gupta-22405a33b" aria-label="LinkedIn" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9.75h4v11.5H3zM9.5 9.75h3.8v1.6h.06c.53-1 1.84-2.05 3.78-2.05 4.04 0 4.78 2.66 4.78 6.12v5.78h-4v-5.13c0-1.22-.02-2.8-1.7-2.8-1.7 0-1.96 1.33-1.96 2.71v5.22h-4z"/></svg></a>
+      <a href="https://www.instagram.com/who.tf.is.nikhil/" aria-label="Instagram" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3zm5 3.5A4.5 4.5 0 1 1 7.5 12 4.5 4.5 0 0 1 12 7.5zm0 2A2.5 2.5 0 1 0 14.5 12 2.5 2.5 0 0 0 12 9.5zM17.2 5.8a1 1 0 1 1-1 1 1 1 0 0 1 1-1z"/></svg></a>
     </div>
-    <p style="font-size:12px;margin:0 auto">your-email@example.com</p>
+    <p style="margin:0 auto;max-width:none"><a class="mail" href="mailto:ng5196340@gmail.com?subject=Hello%20Nikhil">ng5196340@gmail.com</a></p>
   </div>
 </section>
 
-<footer>© <span id="yr"></span> Nikhil · built by hand, deployed on GitHub Pages</footer>
+<footer>© <span id="yr"></span> Nikhil · built by hand · a little nicotine · too much caffeine</footer>
 
 <script>
 // typing effect
@@ -488,7 +545,7 @@ document.getElementById('yr').textContent=new Date().getFullYear();
     projects:function(){return '1. chaos-lab\n2. rolling-updates\n3. hpa-autoscaling\n4. video-chat-pipeline\n5. resumescan\n6. aurum';},
     'kubectl get pods':function(){return 'NAME        READY   STATUS    RESTARTS\nweb-7d9f    1/1     Running   0\nweb-8c2a    1/1     Running   0\nweb-1b4e    1/1     Running   0\nprometheus  1/1     Running   0';},
     github:function(){return 'https://github.com/nikhil-flux';},
-    contact:function(){return 'email: your-email@example.com  |  open to junior DevOps roles';},
+    contact:function(){return 'email: ng5196340@gmail.com  |  open to junior DevOps roles';},
     sudo:function(){return '<e>nice try. nikhil is not in the sudoers file. this incident will be reported.</e>';}
   };
   function print(t,cls){var d=document.createElement('div');d.innerHTML=t;if(cls)d.className=cls;out.appendChild(d);out.scrollTop=out.scrollHeight;}
@@ -506,6 +563,23 @@ document.getElementById('yr').textContent=new Date().getFullYear();
     if(r){r=r();var cls=r.indexOf('<e>')===0?'e':'';print(r.replace(/<\/?e>/g,'').replace(/\n/g,'<br>'),cls);}
     else print('command not found: '+esc(v)+". try 'help'",'e');
   });
+})();
+
+
+// ---------- live metrics
+(function(){
+  var lat=document.getElementById('m-lat'),rps=document.getElementById('m-rps'),pods=document.getElementById('m-pods'),up=document.getElementById('m-up');
+  var t0=Date.now(),base=42,r=128;
+  function pad(n){return (n<10?'0':'')+n}
+  setInterval(function(){
+    base=Math.max(18,Math.min(90,base+(Math.random()*8-4)));r=Math.max(60,Math.min(260,r+(Math.random()*20-10)));
+    lat.textContent=Math.round(base)+' ms';rps.textContent=Math.round(r)+' /s';
+    var s=Math.floor((Date.now()-t0)/1000);up.textContent=pad(Math.floor(s/3600))+':'+pad(Math.floor(s%3600/60))+':'+pad(s%60);
+  },1000);
+  setInterval(function(){ // occasional pod blip
+    pods.textContent='2/3';pods.style.color='var(--pink)';
+    setTimeout(function(){pods.textContent='3/3';pods.style.color='';},1500);
+  },14000);
 })();
 
 // reveal + gauge + counters on scroll
