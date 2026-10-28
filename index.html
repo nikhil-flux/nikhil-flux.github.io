@@ -1,8 +1,523 @@
 <!DOCTYPE html>
-<html>
-<head><title>Nikhil | DevOps</title></head>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nikhil | DevOps Engineer</title>
+<meta name="description" content="Nikhil (nikz) - aspiring DevOps engineer. Kubernetes, Docker, CI/CD, chaos engineering.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Orbitron:wght@600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#050b1f; --bg2:#0a1f55; --panel:rgba(20,50,120,.35); --line:rgba(120,170,255,.22);
+  --text:#dfe9ff; --muted:#8fa6d6; --cyan:#4df0d0; --pink:#ff5d8f; --blue:#4d8dff;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;background:#0a1f55}
+body{
+  font-family:'JetBrains Mono',monospace;color:var(--text);line-height:1.6;
+  background:radial-gradient(1200px 700px at 50% 100%,#1346b8 0%,transparent 70%),
+             linear-gradient(180deg,var(--bg) 0%,var(--bg2) 100%);
+  background-attachment:fixed;min-height:100vh;overflow-x:hidden;
+}
+body::before{ /* grid */
+  content:"";position:fixed;inset:0;pointer-events:none;opacity:.35;
+  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+  background-size:56px 56px;mask-image:radial-gradient(ellipse at 50% 30%,#000 10%,transparent 75%);
+  -webkit-mask-image:radial-gradient(ellipse at 50% 30%,#000 10%,transparent 75%);
+}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px;position:relative}
+h1,h2,.display{font-family:'Orbitron',sans-serif;letter-spacing:.04em;text-transform:uppercase}
+
+/* nav */
+nav{position:sticky;top:0;z-index:20;backdrop-filter:blur(10px);background:rgba(5,11,31,.55);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:60px;gap:16px}
+.logo{font-weight:700;font-size:15px}.logo small{display:block;font-size:10px;color:var(--muted);font-weight:400}
+.logo b{color:var(--cyan)}
+.links{display:flex;gap:22px;font-size:13px;color:var(--muted)}
+.links a:hover{color:var(--cyan)}
+.nav-r{display:flex;align-items:center;gap:12px;font-size:12px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan);display:inline-block;margin-right:6px;animation:pulse 2s infinite}
+@keyframes pulse{50%{opacity:.35}}
+.btn{display:inline-block;padding:10px 18px;border-radius:8px;border:1px solid var(--line);font-size:13px;transition:.2s}
+.btn.primary{background:var(--cyan);color:#04202a;font-weight:700;border-color:var(--cyan)}
+.btn.primary:hover{box-shadow:0 0 24px rgba(77,240,208,.5);transform:translateY(-2px)}
+.btn.ghost:hover{border-color:var(--cyan);color:var(--cyan);transform:translateY(-2px)}
+.btn.sm{padding:6px 12px;font-size:12px;color:var(--cyan)}
+
+/* hero */
+.hero{padding:80px 0 60px;display:grid;grid-template-columns:1.05fr 1fr;gap:40px;align-items:center}
+.pill{display:inline-block;font-size:11px;color:var(--cyan);border:1px solid var(--line);border-radius:999px;padding:4px 12px;background:var(--panel);margin-bottom:22px}
+h1{font-size:clamp(38px,6vw,64px);line-height:1.05;text-shadow:0 0 30px rgba(120,170,255,.5)}
+.role{color:var(--cyan);font-weight:700;margin:14px 0 18px;font-size:clamp(14px,2vw,18px)}
+.typing{color:var(--text);min-height:76px;font-size:14px;max-width:520px}
+.typing::before{content:"$ ";color:var(--cyan)}
+.caret{display:inline-block;width:8px;height:15px;background:var(--cyan);vertical-align:-2px;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.cta{display:flex;gap:12px;flex-wrap:wrap;margin:26px 0}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-size:11px;padding:4px 10px;border-radius:6px;border:1px solid var(--line);background:rgba(10,30,80,.5);color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:30px;max-width:520px}
+.stat{padding:12px;border:1px solid var(--line);background:var(--panel);border-radius:10px}
+.stat b{display:block;color:var(--cyan);font-size:20px}.stat span{font-size:10px;color:var(--muted)}
+
+/* diagram card */
+.card{border:1px solid var(--line);background:var(--panel);border-radius:14px;backdrop-filter:blur(6px);position:relative}
+.diagram{padding:18px}
+.diagram .top{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:6px}
+.diagram svg{width:100%;height:auto;display:block}
+.node rect{fill:rgba(10,30,80,.85);stroke:var(--line)}
+.node text{fill:var(--text);font-size:11px;font-family:'JetBrains Mono',monospace;text-anchor:middle}
+.flow{stroke:var(--blue);stroke-width:1.4;stroke-dasharray:5 5;fill:none;animation:dash 1.2s linear infinite}
+.flow.p{stroke:var(--pink)}
+@keyframes dash{to{stroke-dashoffset:-20}}
+.orbit{transform-box:view-box;transform-origin:340px 150px;animation:spin 14s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* sections */
+section{padding:90px 0}
+.sec-head{text-align:center;margin-bottom:46px}
+.sec-head h2{font-size:clamp(26px,4vw,40px);text-shadow:0 0 24px rgba(120,170,255,.45)}
+.sec-head p{font-size:12px;color:var(--muted);margin-top:8px}
+.sec-head p .g{color:var(--cyan)}.sec-head p .r{color:var(--pink)}
+
+/* gauge */
+.gauge-sec{text-align:center}
+.gauge-sec .tag{font-size:11px;color:var(--muted)}
+.gauge{width:280px;margin:30px auto 0}
+.gauge .arc{fill:none;stroke-width:14;stroke-linecap:round}
+.gauge .bg{stroke:rgba(120,170,255,.15)}
+.gauge .a{stroke:var(--cyan);stroke-dasharray:0 400;transition:stroke-dasharray 1.6s ease}
+.gauge .b{stroke:var(--pink);stroke-dasharray:0 400;transition:stroke-dasharray 1.6s ease .2s}
+.gauge.in .a{stroke-dasharray:130 400}
+.gauge.in .b{stroke-dasharray:90 400}
+.gauge text{fill:var(--text);font-family:'Orbitron',sans-serif;font-size:22px;text-anchor:middle}
+.legend{display:flex;justify-content:center;gap:24px;font-size:11px;color:var(--muted);margin-top:10px}
+
+/* terminal windows */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.win{overflow:hidden}
+.bar{display:flex;align-items:center;gap:7px;padding:10px 14px;border-bottom:1px solid var(--line);font-size:11px;color:var(--muted)}
+.bar i{width:10px;height:10px;border-radius:50%;display:inline-block}
+.bar i:nth-child(1){background:#ff5f57}.bar i:nth-child(2){background:#febc2e}.bar i:nth-child(3){background:#28c840}
+.bar span{margin-left:8px}
+.bar em{margin-left:auto;font-style:normal;font-size:10px;padding:2px 9px;border-radius:999px;border:1px solid var(--line)}
+.bar em.ok{color:var(--cyan);border-color:rgba(77,240,208,.4)}
+.bar em.wip{color:var(--pink);border-color:rgba(255,93,143,.4)}
+.body{padding:18px;font-size:13px}
+.body p{color:var(--muted)}
+.body ul{list-style:none;margin-top:6px}
+.body li{padding:3px 0;color:var(--text)}
+.body li::before{content:"[x] ";color:var(--cyan)}
+.stack{display:grid;grid-template-columns:70px 1fr;gap:8px 12px;font-size:12px}
+.stack b{color:var(--cyan);font-weight:500}
+
+/* projects */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.proj{transition:.25s}
+.proj:hover{transform:translateY(-6px);border-color:var(--cyan);box-shadow:0 14px 40px rgba(20,80,200,.35)}
+.proj h3{font-size:17px;margin-bottom:8px}
+.proj p{font-size:12.5px;color:var(--muted);margin-bottom:14px}
+.proj .chips{margin-bottom:16px}
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s,transform .7s}
+.reveal.in{opacity:1;transform:none}
+
+/* contact */
+.contact{text-align:center}
+.contact h2{font-size:clamp(28px,5vw,46px)}
+.contact p{color:var(--muted);font-size:13px;margin:14px auto 24px;max-width:460px}
+.socials{display:flex;gap:14px;justify-content:center;margin-bottom:20px}
+.socials a{width:46px;height:46px;border-radius:12px;border:1px solid var(--line);display:grid;place-items:center;background:var(--panel);transition:.2s}
+.socials a:hover{border-color:var(--cyan);color:var(--cyan);transform:translateY(-3px)}
+.socials svg{width:20px;height:20px;fill:currentColor}
+footer{padding:30px 0 40px;text-align:center;font-size:11px;color:var(--muted)}
+
+
+/* playground */
+.lab{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.lab .full{grid-column:1/-1}
+.ctl{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:14px}
+button.btn{background:transparent;color:var(--text);cursor:pointer;font-family:inherit}
+button.btn.danger{border-color:rgba(255,93,143,.5);color:var(--pink)}
+button.btn.danger:hover{background:rgba(255,93,143,.12)}
+.pods{display:flex;flex-wrap:wrap;gap:8px;min-height:44px;margin:12px 0}
+.pod{width:34px;height:34px;border-radius:8px;display:grid;place-items:center;font-size:10px;border:1px solid rgba(77,240,208,.5);background:rgba(77,240,208,.12);color:var(--cyan);transition:.3s}
+.pod.dead{border-color:var(--pink);background:rgba(255,93,143,.2);color:var(--pink);animation:shake .3s}
+.pod.new{animation:pop .4s}
+@keyframes shake{25%{transform:translateX(-3px)}75%{transform:translateX(3px)}}
+@keyframes pop{from{transform:scale(.3);opacity:0}}
+.log{font-size:11.5px;color:var(--muted);height:96px;overflow:auto;border-top:1px dashed var(--line);padding-top:8px}
+.log div b{color:var(--cyan);font-weight:500}.log div.err b{color:var(--pink)}
+.meter{height:8px;border-radius:99px;background:rgba(120,170,255,.15);overflow:hidden;margin-top:6px}
+.meter span{display:block;height:100%;width:30%;background:linear-gradient(90deg,var(--cyan),var(--blue));transition:width .3s}
+input[type=range]{width:100%;accent-color:var(--cyan)}
+.pipe{display:flex;align-items:stretch;gap:0;flex-wrap:wrap;margin-top:6px}
+.stage{flex:1;min-width:110px;padding:14px 10px;text-align:center;border:1px solid var(--line);background:rgba(10,30,80,.5);font-size:12px;cursor:pointer;transition:.3s;position:relative}
+.stage:first-child{border-radius:10px 0 0 10px}.stage:last-child{border-radius:0 10px 10px 0}
+.stage small{display:block;color:var(--muted);font-size:10px;margin-top:2px}
+.stage.run{border-color:var(--blue);box-shadow:0 0 18px rgba(77,141,255,.6);animation:pulse 1s infinite}
+.stage.ok{border-color:var(--cyan);color:var(--cyan)}
+.stage.ok::after{content:"✓";position:absolute;top:4px;right:8px}
+.stage.sel{background:rgba(77,141,255,.25)}
+.pipeinfo{margin-top:12px;font-size:12.5px;color:var(--muted);min-height:40px}
+.term{background:rgba(2,8,24,.8);font-size:13px}
+.termout{height:240px;overflow:auto;padding:14px;white-space:pre-wrap;word-break:break-word}
+.termout .c{color:var(--cyan)}.termout .e{color:var(--pink)}
+.termin{display:flex;gap:8px;padding:10px 14px;border-top:1px solid var(--line)}
+.termin span{color:var(--cyan)}
+.termin input{flex:1;background:none;border:0;outline:0;color:var(--text);font:inherit}
+@media(max-width:860px){.lab{grid-template-columns:1fr}.stage{min-width:45%;border-radius:10px!important}}
+
+@media(max-width:860px){
+  .hero,.two,.grid{grid-template-columns:1fr}
+  .links{display:none}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  section{padding:60px 0}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}}
+</style>
+</head>
 <body>
-  <h1>Hi, I'm Nikhil</h1>
-  <p>Aspiring DevOps Engineer</p>
+
+<nav>
+  <div class="wrap">
+    <a href="#top" class="logo"><b>nikhil</b>.sh<small>devops &amp; cloud-native</small></a>
+    <div class="links"><a href="#about">/about</a><a href="#lab">/lab</a><a href="#projects">/projects</a><a href="#resume">/resume</a><a href="#contact">/contact</a></div>
+    <div class="nav-r"><span><i class="dot"></i>open to work</span><a class="btn sm" href="#contact">&gt;hire_me</a></div>
+  </div>
+</nav>
+
+<header class="wrap hero" id="top">
+  <div>
+    <span class="pill">node 01 · region: india</span>
+    <h1>Nikhil</h1>
+    <p class="role">Aspiring DevOps Engineer · Cloud-Native</p>
+    <p class="typing"><span id="type"></span><span class="caret"></span></p>
+    <div class="cta">
+      <a class="btn primary" href="#projects">./view_projects</a>
+      <a class="btn ghost" href="resume.pdf">./download_resume</a>
+    </div>
+    <div class="chips">
+      <span class="chip">Kubernetes</span><span class="chip">Docker</span><span class="chip">Terraform</span>
+      <span class="chip">CI/CD</span><span class="chip">Prometheus</span><span class="chip">Grafana</span><span class="chip">Linux</span>
+    </div>
+    <div class="stats">
+      <div class="stat"><b data-n="5">0</b><span>projects shipped</span></div>
+      <div class="stat"><b data-n="6">0</b><span>core tools</span></div>
+      <div class="stat"><b data-n="1">0</b><span>chaos lab</span></div>
+      <div class="stat"><b>24/7</b><span>learning mode</span></div>
+    </div>
+  </div>
+
+  <div class="card diagram">
+    <div class="top"><span>fig. 01 · request path</span><span>live</span></div>
+    <svg viewBox="0 0 520 300" role="img" aria-label="Request flows from client through CDN and load balancer into a Kubernetes cluster, then to a database and monitoring">
+      <g class="node"><rect x="10" y="135" width="62" height="30" rx="8"/><text x="41" y="154">client</text></g>
+      <g class="node"><rect x="100" y="135" width="52" height="30" rx="8"/><text x="126" y="154">cdn</text></g>
+      <g class="node"><rect x="180" y="135" width="52" height="30" rx="8"/><text x="206" y="154">lb</text></g>
+      <path class="flow" d="M72 150H100M152 150H180M232 150H275"/>
+      <circle cx="340" cy="150" r="64" fill="rgba(20,60,160,.35)" stroke="var(--line)"/>
+      <g class="orbit"><circle cx="340" cy="86" r="5" fill="var(--cyan)"/><circle cx="404" cy="150" r="5" fill="var(--blue)"/><circle cx="340" cy="214" r="5" fill="var(--cyan)"/><circle cx="276" cy="150" r="5" fill="var(--blue)"/></g>
+      <circle cx="340" cy="150" r="14" fill="var(--cyan)" opacity=".9"/>
+      <text x="340" y="250" fill="var(--muted)" font-size="10" text-anchor="middle" font-family="JetBrains Mono">k8s cluster</text>
+      <path class="flow" d="M404 150H448"/>
+      <g class="node"><rect x="448" y="135" width="66" height="30" rx="8"/><text x="481" y="154">database</text></g>
+      <path class="flow p" d="M370 205C390 250 400 262 420 262"/>
+      <g class="node"><rect x="420" y="248" width="94" height="28" rx="8" style="stroke:var(--pink)"/><text x="467" y="266" style="fill:var(--pink)">prometheus</text></g>
+    </svg>
+  </div>
+</header>
+
+<section class="gauge-sec" id="platform">
+  <div class="wrap">
+    <p class="tag">// layer 00 · my philosophy</p>
+    <h2 class="display" style="font-size:clamp(24px,4vw,38px);margin-top:10px">Platform below. Services above.</h2>
+    <svg class="gauge" id="gauge" viewBox="0 0 280 170">
+      <path class="arc bg" d="M30 150A110 110 0 0 1 250 150"/>
+      <path class="arc a" d="M30 150A110 110 0 0 1 250 150" pathLength="400"/>
+      <path class="arc b" d="M30 150A110 110 0 0 1 250 150" pathLength="400" transform="translate(0 0)" style="stroke-dashoffset:-130"/>
+      <text x="140" y="132">infra / app</text>
+    </svg>
+    <div class="legend"><span style="color:var(--cyan)">● reliability</span><span style="color:var(--pink)">● automation</span></div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap">
+    <div class="sec-head"><h2>About</h2><p>whoami &amp;&amp; cat stack.txt</p></div>
+    <div class="two">
+      <div class="card win reveal">
+        <div class="bar"><i></i><i></i><i></i><span>platform_engineering.sh</span></div>
+        <div class="body">
+          <p>I build and break things on Kubernetes so I know how they fail. I enjoy turning manual steps into pipelines and dashboards.</p>
+          <ul style="margin-top:14px">
+            <li>containerise apps with Docker</li>
+            <li>deploy and roll back on Kubernetes</li>
+            <li>automate with CI/CD and Terraform</li>
+            <li>observe with Prometheus and Grafana</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card win reveal">
+        <div class="bar"><i></i><i></i><i></i><span>tech_stack.yaml</span></div>
+        <div class="body stack">
+          <b>ops</b><span>Kubernetes · Docker · Linux · Nginx</span>
+          <b>iac</b><span>Terraform · Helm</span>
+          <b>ci/cd</b><span>GitHub Actions · ArgoCD</span>
+          <b>obs</b><span>Prometheus · Grafana · Slack alerts</span>
+          <b>chaos</b><span>Chaos Mesh</span>
+          <b>code</b><span>Python · Node.js · Bash</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section id="lab">
+  <div class="wrap">
+    <div class="sec-head"><h2>Playground</h2><p>try things · break things · nothing here is real prod</p></div>
+    <div class="lab">
+
+      <div class="card win reveal">
+        <div class="bar"><i></i><i></i><i></i><span>chaos_mesh.sim</span><em class="ok" id="svc">● healthy</em></div>
+        <div class="body">
+          <p>Kill pods and watch the Deployment bring them back.</p>
+          <div class="pods" id="pods"></div>
+          <div class="ctl">
+            <button class="btn danger" id="kill">☠ kill random pod</button>
+            <button class="btn danger" id="killall">☠ kill all</button>
+          </div>
+          <div class="log" id="log"></div>
+        </div>
+      </div>
+
+      <div class="card win reveal">
+        <div class="bar"><i></i><i></i><i></i><span>hpa_autoscaler.sim</span><em class="ok" id="hpaState">● 2 replicas</em></div>
+        <div class="body">
+          <p>Drag the traffic slider. The autoscaler adds or removes pods to keep CPU near 50%.</p>
+          <input type="range" id="load" min="0" max="100" value="20" aria-label="traffic load">
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted)"><span>traffic: <b id="loadv" style="color:var(--text)">20</b> rps</span><span>cpu: <b id="cpuv" style="color:var(--cyan)">--</b>%</span></div>
+          <div class="meter"><span id="cpubar"></span></div>
+          <div class="pods" id="hpapods" style="margin-top:14px"></div>
+        </div>
+      </div>
+
+      <div class="card win reveal full">
+        <div class="bar"><i></i><i></i><i></i><span>pipeline.yml</span></div>
+        <div class="body">
+          <p>Hit run, or click any stage to see what happens there.</p>
+          <div class="pipe" id="pipe">
+            <div class="stage" data-i="0">commit<small>git push</small></div>
+            <div class="stage" data-i="1">build<small>docker build</small></div>
+            <div class="stage" data-i="2">test<small>unit + lint</small></div>
+            <div class="stage" data-i="3">push<small>image registry</small></div>
+            <div class="stage" data-i="4">deploy<small>kubectl rollout</small></div>
+            <div class="stage" data-i="5">observe<small>grafana + alerts</small></div>
+          </div>
+          <div class="pipeinfo" id="pipeinfo">&gt; select a stage</div>
+          <div class="ctl"><button class="btn primary" id="runpipe">▶ run pipeline</button></div>
+        </div>
+      </div>
+
+      <div class="card win term reveal full">
+        <div class="bar"><i></i><i></i><i></i><span>nikhil@portfolio: ~</span></div>
+        <div class="termout" id="tout"></div>
+        <div class="termin"><span>$</span><input id="tin" autocomplete="off" spellcheck="false" placeholder="type 'help'" aria-label="terminal input"></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="wrap">
+    <div class="sec-head"><h2>Things I've shipped</h2><p>total: 5 · <span class="g">3 deployed</span> · <span class="r">2 in progress</span></p></div>
+    <div class="grid">
+
+      <article class="card win proj reveal">
+        <div class="bar"><i></i><i></i><i></i><span>chaos-lab.yaml</span><em class="ok">● deployed</em></div>
+        <div class="body">
+          <h3>Chaos Engineering Lab</h3>
+          <p>Microservice app on Kubernetes, deliberately broken with Chaos Mesh. Grafana dashboards and Slack alerts show how the system reacts.</p>
+          <div class="chips"><span class="chip">Kubernetes</span><span class="chip">Chaos Mesh</span><span class="chip">Grafana</span><span class="chip">Terraform</span></div>
+          <a class="btn sm" href="https://github.com/nikhil-flux" target="_blank" rel="noopener">&gt; view_source()</a>
+        </div>
+      </article>
+
+      <article class="card win proj reveal">
+        <div class="bar"><i></i><i></i><i></i><span>rolling-updates.yaml</span><em class="ok">● deployed</em></div>
+        <div class="body">
+          <h3>Rolling Updates &amp; Rollbacks</h3>
+          <p>Zero-downtime deployments and one-command rollbacks in plain Kubernetes with kubectl.</p>
+          <div class="chips"><span class="chip">Kubernetes</span><span class="chip">kubectl</span><span class="chip">Docker</span></div>
+          <a class="btn sm" href="https://github.com/nikhil-flux" target="_blank" rel="noopener">&gt; view_source()</a>
+        </div>
+      </article>
+
+      <article class="card win proj reveal">
+        <div class="bar"><i></i><i></i><i></i><span>hpa-autoscaling.yaml</span><em class="ok">● deployed</em></div>
+        <div class="body">
+          <h3>HPA Autoscaling Demo</h3>
+          <p>Horizontal Pod Autoscaler reacting to CPU load, with a load generator to watch pods scale up and down.</p>
+          <div class="chips"><span class="chip">Kubernetes</span><span class="chip">HPA</span><span class="chip">metrics-server</span></div>
+          <a class="btn sm" href="https://github.com/nikhil-flux" target="_blank" rel="noopener">&gt; view_source()</a>
+        </div>
+      </article>
+
+      <article class="card win proj reveal">
+        <div class="bar"><i></i><i></i><i></i><span>video-chat-pipeline.yml</span><em class="wip">● in progress</em></div>
+        <div class="body">
+          <h3>Video Chat CI/CD Pipeline</h3>
+          <p>My own Node.js video chat app, getting a full Docker, CI/CD and Kubernetes delivery pipeline.</p>
+          <div class="chips"><span class="chip">Node.js</span><span class="chip">Docker</span><span class="chip">GitHub Actions</span><span class="chip">Kubernetes</span></div>
+          <a class="btn sm" href="https://github.com/nikhil-flux" target="_blank" rel="noopener">&gt; view_source()</a>
+        </div>
+      </article>
+
+      <article class="card win proj reveal">
+        <div class="bar"><i></i><i></i><i></i><span>resumescan.html</span><em class="ok">● deployed</em></div>
+        <div class="body">
+          <h3>ResumeScan</h3>
+          <p>Browser-based ATS CV checker. A single HTML/JS file that scores your resume locally, nothing uploaded.</p>
+          <div class="chips"><span class="chip">JavaScript</span><span class="chip">HTML</span></div>
+          <a class="btn sm" href="https://github.com/nikhil-flux" target="_blank" rel="noopener">&gt; view_source()</a>
+        </div>
+      </article>
+
+      <article class="card win proj reveal">
+        <div class="bar"><i></i><i></i><i></i><span>aurum.tsx</span><em class="wip">● in progress</em></div>
+        <div class="body">
+          <h3>Aurum</h3>
+          <p>AI analyst terminal for XAUUSD gold trading, with multi-AI support, rule-based scenarios and an ML forecast lab.</p>
+          <div class="chips"><span class="chip">Next.js</span><span class="chip">React</span><span class="chip">AWS</span></div>
+          <a class="btn sm" href="https://github.com/nikhil-flux" target="_blank" rel="noopener">&gt; view_source()</a>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<section id="resume" style="padding-top:30px">
+  <div class="wrap" style="text-align:center">
+    <a class="btn primary" href="resume.pdf">./download_resume</a>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="wrap">
+    <p style="font-size:11px;color:var(--muted)">// status: open to work · junior devops roles</p>
+    <h2 style="margin-top:10px">Let's build something</h2>
+    <p>Got an internship, a junior DevOps role, or a project idea? Say hello.</p>
+    <div class="socials">
+      <a href="https://github.com/nikhil-flux" aria-label="GitHub" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z"/></svg></a>
+      <a href="https://www.linkedin.com/" aria-label="LinkedIn" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9.75h4v11.5H3zM9.5 9.75h3.8v1.6h.06c.53-1 1.84-2.05 3.78-2.05 4.04 0 4.78 2.66 4.78 6.12v5.78h-4v-5.13c0-1.22-.02-2.8-1.7-2.8-1.7 0-1.96 1.33-1.96 2.71v5.22h-4z"/></svg></a>
+      <a href="mailto:your-email@example.com" aria-label="Email"><svg viewBox="0 0 24 24"><path d="M3 5h18a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zm9 7.2L4.5 7v.2L12 13l7.5-5.8V7z"/></svg></a>
+    </div>
+    <p style="font-size:12px;margin:0 auto">your-email@example.com</p>
+  </div>
+</section>
+
+<footer>© <span id="yr"></span> Nikhil · built by hand, deployed on GitHub Pages</footer>
+
+<script>
+// typing effect
+(function(){
+  var text="provisioning infrastructure, shipping pipelines, and observing the backend systems that run on time.";
+  var el=document.getElementById('type'),i=0;
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches){el.textContent=text;return;}
+  (function t(){ if(i<=text.length){el.textContent=text.slice(0,i++);setTimeout(t,28);} })();
+})();
+document.getElementById('yr').textContent=new Date().getFullYear();
+
+
+// ---------- chaos sim
+(function(){
+  var pods=document.getElementById('pods'),log=document.getElementById('log'),svc=document.getElementById('svc');
+  var N=4,state=[],n=0;
+  function say(t,err){var d=document.createElement('div');if(err)d.className='err';d.innerHTML='<b>'+new Date().toLocaleTimeString([], {hour12:false})+'</b> '+t;log.appendChild(d);log.scrollTop=log.scrollHeight;}
+  function draw(){pods.innerHTML='';state.forEach(function(p){var e=document.createElement('div');e.className='pod'+(p.dead?' dead':'')+(p.fresh?' new':'');e.textContent=p.dead?'×':p.id;pods.appendChild(e);p.fresh=false;});
+    var alive=state.filter(function(p){return !p.dead}).length;
+    svc.className=alive===N?'ok':'wip';svc.textContent=alive===N?'● healthy':(alive===0?'● outage':'● degraded '+alive+'/'+N);}
+  function spawn(){state.push({id:'p'+(++n),fresh:true});}
+  function heal(p){setTimeout(function(){var i=state.indexOf(p);if(i<0)return;state.splice(i,1);spawn();say('scheduler: started replacement pod p'+n);draw();},1400);}
+  function kill(p){if(p.dead)return;p.dead=true;say('chaos-mesh: killed pod '+p.id,true);draw();heal(p);}
+  for(var i=0;i<N;i++)spawn();draw();say('deployment/web: 4/4 pods ready');
+  document.getElementById('kill').onclick=function(){var a=state.filter(function(p){return !p.dead});if(a.length)kill(a[Math.floor(Math.random()*a.length)]);};
+  document.getElementById('killall').onclick=function(){state.slice().forEach(kill);};
+})();
+
+// ---------- HPA sim
+(function(){
+  var load=document.getElementById('load'),pods=document.getElementById('hpapods'),cpu=document.getElementById('cpuv'),bar=document.getElementById('cpubar'),st=document.getElementById('hpaState'),lv=document.getElementById('loadv');
+  var rep=2,CAP=12; // each pod handles ~10 rps at 100%
+  function cpuNow(){return Math.min(100,Math.round(load.value/(rep*10)*100));}
+  function draw(){pods.innerHTML='';for(var i=0;i<rep;i++){var e=document.createElement('div');e.className='pod';e.textContent=i+1;pods.appendChild(e);}
+    var c=cpuNow();cpu.textContent=c;bar.style.width=c+'%';bar.style.background=c>80?'var(--pink)':'';st.textContent='● '+rep+' replicas';}
+  load.oninput=function(){lv.textContent=load.value;draw();};
+  setInterval(function(){var c=cpuNow(),want=Math.min(CAP,Math.max(1,Math.ceil(rep*c/50)));
+    if(want>rep)rep=Math.min(want,rep+2);else if(want<rep)rep--;draw();},900);
+  draw();
+})();
+
+// ---------- pipeline
+(function(){
+  var st=[].slice.call(document.querySelectorAll('#pipe .stage')),info=document.getElementById('pipeinfo'),running=false;
+  var txt=['git push triggers the workflow on every commit to main.','docker build packages the app into an image tagged with the commit SHA.','unit tests and a linter run. A failure here stops the pipeline.','the tested image is pushed to a registry, ready to deploy.','kubectl rollout updates pods one by one with no downtime, and rolls back if it fails.','Prometheus scrapes metrics, Grafana shows them, Slack gets the alerts.'];
+  function sel(i){st.forEach(function(s,j){s.classList.toggle('sel',i===j)});info.textContent='> '+txt[i];}
+  st.forEach(function(s,i){s.onclick=function(){sel(i)}});
+  document.getElementById('runpipe').onclick=function(){
+    if(running)return;running=true;st.forEach(function(s){s.className='stage'});
+    var i=0;(function step(){ if(i>0){st[i-1].classList.remove('run');st[i-1].classList.add('ok');}
+      if(i>=st.length){running=false;info.textContent='> pipeline passed. deployed to production.';return;}
+      st[i].classList.add('run');sel(i);i++;setTimeout(step,1100);})();
+  };
+})();
+
+// ---------- terminal
+(function(){
+  var out=document.getElementById('tout'),inp=document.getElementById('tin'),hist=[],hi=0;
+  var cmds={
+    help:function(){return 'commands: whoami, ls, cat resume, skills, projects, kubectl get pods, github, contact, clear';},
+    whoami:function(){return 'nikhil - aspiring DevOps engineer. I build things on Kubernetes and then break them on purpose.';},
+    ls:function(){return 'projects/  skills.yaml  resume.pdf  README.md';},
+    'cat resume':function(){return 'opening resume.pdf ...\n(add your link: resume.pdf)';},
+    skills:function(){return 'kubernetes  docker  terraform  ci/cd  prometheus  grafana  linux  python  bash';},
+    projects:function(){return '1. chaos-lab\n2. rolling-updates\n3. hpa-autoscaling\n4. video-chat-pipeline\n5. resumescan\n6. aurum';},
+    'kubectl get pods':function(){return 'NAME        READY   STATUS    RESTARTS\nweb-7d9f    1/1     Running   0\nweb-8c2a    1/1     Running   0\nweb-1b4e    1/1     Running   0\nprometheus  1/1     Running   0';},
+    github:function(){return 'https://github.com/nikhil-flux';},
+    contact:function(){return 'email: your-email@example.com  |  open to junior DevOps roles';},
+    sudo:function(){return '<e>nice try. nikhil is not in the sudoers file. this incident will be reported.</e>';}
+  };
+  function print(t,cls){var d=document.createElement('div');d.innerHTML=t;if(cls)d.className=cls;out.appendChild(d);out.scrollTop=out.scrollHeight;}
+  function esc(s){return s.replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c]})}
+  print("welcome. type <span class='c'>help</span> to see commands.");
+  inp.addEventListener('keydown',function(e){
+    if(e.key==='ArrowUp'){if(hi>0)inp.value=hist[--hi]||'';e.preventDefault();return;}
+    if(e.key==='ArrowDown'){inp.value=hist[++hi]||'';return;}
+    if(e.key!=='Enter')return;
+    var v=inp.value.trim();inp.value='';if(!v)return;hist.push(v);hi=hist.length;
+    print("<span class='c'>$</span> "+esc(v));
+    if(v==='clear'){out.innerHTML='';return;}
+    var key=v.indexOf('sudo')===0?'sudo':v.toLowerCase();
+    var r=cmds[key];
+    if(r){r=r();var cls=r.indexOf('<e>')===0?'e':'';print(r.replace(/<\/?e>/g,'').replace(/\n/g,'<br>'),cls);}
+    else print('command not found: '+esc(v)+". try 'help'",'e');
+  });
+})();
+
+// reveal + gauge + counters on scroll
+var io=new IntersectionObserver(function(es){
+  es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+},{threshold:.15});
+document.querySelectorAll('.reveal,#gauge').forEach(function(n){io.observe(n)});
+
+document.querySelectorAll('[data-n]').forEach(function(n){
+  var to=+n.dataset.n,c=0;
+  var s=setInterval(function(){c++;n.textContent=c;if(c>=to)clearInterval(s)},120);
+});
+</script>
 </body>
 </html>
